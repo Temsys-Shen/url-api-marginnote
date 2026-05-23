@@ -1,6 +1,6 @@
 # URL API网关
 
-这是一个MarginNote4插件，用`marginnote4app://addon/api?...`暴露一期URL API。当前实现覆盖网关认证、标准回调、权限组、防重放，以及MarginNote笔记对象的读写删动作。
+这是一个MarginNote4插件，用 `marginnote4app://addon/api?...`暴露URL API。当前实现覆盖网关认证、标准回调、权限组、防重放，以及MarginNote笔记对象的读写删动作。
 
 ## 开发命令
 
@@ -36,9 +36,9 @@ marginnote4app://addon/api?requestId=...&action=...&secret=...&x-success=...&x-e
 - `x-error`：错误回调URL
 - `payload`：`urlencode(JSON.stringify(payload))`
 
-`callbackSuccess/callbackError`仍可兼容旧客户端，但推荐使用标准`x-success/x-error`。`payload.callbacks`不再作为主协议。
+`callbackSuccess/callbackError`仍可兼容旧客户端，但推荐使用标准 `x-success/x-error`。`payload.callbacks`不再作为主协议。
 
-响应会追加到回调URL的`payload`参数：
+响应会追加到回调URL的 `payload`参数：
 
 ```json
 {
@@ -50,7 +50,7 @@ marginnote4app://addon/api?requestId=...&action=...&secret=...&x-success=...&x-e
 }
 ```
 
-错误码包括`BAD_REQUEST`、`AUTH_FAILED`、`FORBIDDEN`、`NOT_FOUND`、`REPLAY_DETECTED`、`INTERNAL_ERROR`。
+错误码包括 `BAD_REQUEST`、`AUTH_FAILED`、`FORBIDDEN`、`NOT_FOUND`、`REPLAY_DETECTED`、`INTERNAL_ERROR`。
 
 ## 认证与权限
 
@@ -64,14 +64,13 @@ secret=mnsec_xxx
 
 - 空权限：不允许调用任何action
 - 只读权限：`ping/read/ls/find/tree`
-- 写入权限：只读权限加`write`
-- 管理权限：写入权限加`delete`
+- 写入权限：只读权限加 `write`
+- 管理权限：写入权限加 `delete`
 - 全部权限：通配全部action，便于本地测试
-
 
 ## 路径模型
 
-当前路径语义对齐MarginNote自带`MNFileSystem.js`：
+当前路径语义对齐MarginNote自带 `MNFileSystem.js`：
 
 - `notebook://`：全部笔记本根
 - `notebook://笔记本名/卡片名`：按标题路径定位
@@ -83,7 +82,7 @@ secret=mnsec_xxx
 
 ### ping
 
-无需payload，返回版本、时间和`ok:true`。
+无需payload，返回版本、时间和 `ok:true`。
 
 ### ls
 
@@ -95,7 +94,7 @@ secret=mnsec_xxx
 }
 ```
 
-`type`可为`all/notebook/note`。
+`type`可为 `all/notebook/note`。
 
 ### read
 
@@ -117,7 +116,7 @@ secret=mnsec_xxx
 }
 ```
 
-`type`可为`all/notebook/note`。
+`type`可为 `all/notebook/note`。
 
 ### tree
 
@@ -185,7 +184,7 @@ secret=mnsec_xxx
 }
 ```
 
-默认不删除有子节点的笔记。`recursive:true`会调用`deleteBookNoteTree`删除整棵子树。
+默认不删除有子节点的笔记。`recursive:true`会调用 `deleteBookNoteTree`删除整棵子树。
 
 ## 本地URLScheme测试
 
