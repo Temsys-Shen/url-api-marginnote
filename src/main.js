@@ -1,3 +1,29 @@
+JSB.require('gateway/GatewayProtocol');
+JSB.require('gateway/GatewayErrors');
+JSB.require('gateway/GatewayResponse');
+JSB.require('gateway/GatewayLogger');
+JSB.require('gateway/GatewayRequestParser');
+JSB.require('gateway/CallbackResolver');
+JSB.require('gateway/CallbackClient');
+JSB.require('security/PermissionGroups');
+JSB.require('security/SecretStore');
+JSB.require('security/ReplayGuard');
+JSB.require('security/AuthPolicy');
+JSB.require('ui/SecretPanel');
+JSB.require('filesystem/FileSystemUtils');
+JSB.require('filesystem/PathResolver');
+JSB.require('filesystem/NoteSerializer');
+JSB.require('filesystem/FileSystemService');
+JSB.require('actions/PingAction');
+JSB.require('actions/ReadAction');
+JSB.require('actions/LsAction');
+JSB.require('actions/FindAction');
+JSB.require('actions/TreeAction');
+JSB.require('actions/WriteAction');
+JSB.require('actions/DeleteAction');
+JSB.require('gateway/GatewayRouter');
+JSB.require('gateway/GatewayRuntime');
+JSB.require('gateway/AddonBroadcastObserver');
 JSB.require('MNUrlApisAddon');
 
 JSB.newAddon = function (mainPath) {

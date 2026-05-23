@@ -7,6 +7,8 @@
     "dev": "node scripts/live-deploy.js once",
     "live": "node scripts/live-deploy.js watch",
     "live:stop": "node scripts/stop-live.js",
+    "test:gateway": "node scripts/test-gateway.js",
+    "test:urlscheme": "node tools/urlscheme-test.js",
     "version": "node scripts/bump-version.js",
     "version:patch": "node scripts/bump-version.js patch",
     "version:minor": "node scripts/bump-version.js minor",
