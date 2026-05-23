@@ -11,10 +11,6 @@ var MNURLGatewayProtocol = {
     SUCCESS: "x-success",
     ERROR: "x-error",
   },
-  LEGACY_CALLBACK_FIELDS: {
-    SUCCESS: "callbackSuccess",
-    ERROR: "callbackError",
-  },
   ACTIONS: {
     PING: "ping",
     READ: "read",

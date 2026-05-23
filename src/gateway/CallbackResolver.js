@@ -1,14 +1,12 @@
 function MNURLResolveGatewayCallbacks(request) {
   return {
-    successUrl: MNURLSelectCallbackUrl(
+    successUrl: MNURLSelectQueryValue(
       request.query,
       MNURLGatewayProtocol.CALLBACK_FIELDS.SUCCESS,
-      MNURLGatewayProtocol.LEGACY_CALLBACK_FIELDS.SUCCESS,
     ),
-    errorUrl: MNURLSelectCallbackUrl(
+    errorUrl: MNURLSelectQueryValue(
       request.query,
       MNURLGatewayProtocol.CALLBACK_FIELDS.ERROR,
-      MNURLGatewayProtocol.LEGACY_CALLBACK_FIELDS.ERROR,
     ),
   };
 }
@@ -26,10 +24,6 @@ function MNURLRequireGatewayCallbacks(callbacks) {
   if (missing.length > 0) {
     throw MNURLBadRequest("Missing callback URL", {
       fields: missing,
-      legacyFields: [
-        MNURLGatewayProtocol.LEGACY_CALLBACK_FIELDS.SUCCESS,
-        MNURLGatewayProtocol.LEGACY_CALLBACK_FIELDS.ERROR,
-      ],
     });
   }
 }
@@ -48,26 +42,13 @@ function MNURLResolveRawErrorCallbackUrl(rawUrl) {
   return MNURLSelectQueryValue(
     queryParams,
     MNURLGatewayProtocol.CALLBACK_FIELDS.ERROR,
-  ) ||
-    MNURLSelectQueryValue(
-      queryParams,
-      MNURLGatewayProtocol.LEGACY_CALLBACK_FIELDS.ERROR,
-    );
+  );
 }
 
 function MNURLPrepareGatewayRequest(request, callbacks) {
   request.callbacks = callbacks;
   request.payload = MNURLStripCallbackTransportFields(request.payload);
   return request;
-}
-
-function MNURLSelectCallbackUrl(
-  queryParams,
-  queryKey,
-  legacyQueryKey
-) {
-  return MNURLSelectQueryValue(queryParams, queryKey) ||
-    MNURLSelectQueryValue(queryParams, legacyQueryKey);
 }
 
 function MNURLSelectQueryValue(queryParams, key) {

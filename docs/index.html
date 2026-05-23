@@ -14,7 +14,17 @@
         <h2>1. 基础概念</h2>
         
         <h3>1.1 密钥与权限组 (Secret & Permissions)</h3>
-        <p>为了保护您的数据安全，所有 API 请求都需要进行身份验证。在 MarginNote 中点击插件图标可打开 <strong>Secret 管理面板</strong>。您可以在此生成具备不同权限的密钥（Secret）：</p>
+        <p>为了保护您的数据安全，所有 API 请求都需要进行身份验证。在 MarginNote 中点击插件图标可打开 <strong>Secret 管理面板</strong>，您可以在面板中完成以下操作：</p>
+        <ul>
+            <li><strong>生成密钥</strong>：点击权限按钮（EMPTY / READ / WRITE / ADMIN / ALL）即可生成对应权限的新密钥，并自动复制到剪贴板。</li>
+            <li><strong>查看密钥列表</strong>：左侧区域列出所有已生成的密钥，点击可选中查看详情。</li>
+            <li><strong>查看详情</strong>：右侧显示选中的密钥 ID、密钥（部分掩码）、权限组（Permission）、备注（Note）。</li>
+            <li><strong>添加备注</strong>：在 Note 输入框中填写备注文字，点击 SAVE NOTE 保存。</li>
+            <li><strong>复制密钥</strong>：点击 COPY 将选中密钥复制到剪贴板。</li>
+            <li><strong>删除密钥</strong>：点击 DELETE 删除选中的密钥。</li>
+            <li><strong>修改权限</strong>：在 SET PERMISSION 区域点击对应权限按钮，更改选中密钥的权限组。</li>
+        </ul>
+        <p>密钥支持的权限组：</p>
         <ul>
             <li><strong>空权限 (EMPTY)</strong>：无法执行任何动作。</li>
             <li><strong>只读权限 (READ)</strong>：仅允许读取（ping, read, ls, find, tree）。</li>
@@ -98,12 +108,52 @@
         
         <p>解开 URL Encode 后的响应 JSON 结构：</p>
         <pre><code>{
-  "code": "OK", // 错误时可能为 BAD_REQUEST, AUTH_FAILED, FORBIDDEN, NOT_FOUND 等
+  "code": "OK",
   "message": "OK",
   "requestId": "12345", // 与您请求时一致
   "data": { ... }, // 成功时包含的返回数据
   "details": null // 错误时的详细原因
 }</code></pre>
+        
+        <p>完整的错误码：</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>错误码</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>OK</code></td>
+                    <td>成功。</td>
+                </tr>
+                <tr>
+                    <td><code>BAD_REQUEST</code></td>
+                    <td>请求参数错误（如缺少必填字段）。</td>
+                </tr>
+                <tr>
+                    <td><code>AUTH_FAILED</code></td>
+                    <td>密钥认证失败（secret 无效）。</td>
+                </tr>
+                <tr>
+                    <td><code>FORBIDDEN</code></td>
+                    <td>权限不足（密钥不具备该操作所需的权限）。</td>
+                </tr>
+                <tr>
+                    <td><code>NOT_FOUND</code></td>
+                    <td>目标路径或资源不存在。</td>
+                </tr>
+                <tr>
+                    <td><code>REPLAY_DETECTED</code></td>
+                    <td>防重放机制触发，该 requestId 已被使用过。</td>
+                </tr>
+                <tr>
+                    <td><code>INTERNAL_ERROR</code></td>
+                    <td>插件内部异常，请检查日志。</td>
+                </tr>
+            </tbody>
+        </table>
 
         <hr>
 
@@ -160,7 +210,9 @@
   "mode": "create",
   "path": "notebook://笔记本名称", // 父节点路径（也可以用 parentPath 字段）
   "title": "新卡片标题", // 必须
-  "content": "摘录或正文内容" 
+  "content": "摘录或正文内容",
+  "colorIndex": 0, // 可选：修改颜色
+  "fillIndex": 0   // 可选：修改填充样式
 }</code></pre>
             <p><strong>更新卡片 (update)</strong>:</p>
             <pre><code>{
