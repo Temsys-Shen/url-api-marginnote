@@ -1,0 +1,23 @@
+#include 'actions/web'
+#include 'actions/text'
+#include 'actions/sharing'
+
+const writeSecret = prompt("请输入WRITE权限secret")
+const notebookPath = prompt("请输入目标笔记本路径，例如notebook://Inbox", "Text", "notebook://")
+const incomingType = typeOf(ShortcutInput)
+const incomingText = getText(ShortcutInput)
+const title = prompt("请输入卡片标题")
+const contentPrompt = "请输入正文内容。当前输入类型: {incomingType}"
+const content = prompt(contentPrompt, "Text", incomingText)
+@payload = {}
+@payload = setValue(@payload, "mode", "create")
+@payload = setValue(@payload, "path", notebookPath)
+@payload = setValue(@payload, "title", title)
+@payload = setValue(@payload, "content", content)
+const payloadText = getText(@payload)
+const payloadEncoded = urlEncode(payloadText)
+const requestURL = "marginnote4app://addon/api?requestId=req_collect&action=write&secret={writeSecret}&payload={payloadEncoded}"
+const result = openXCallbackURL(requestURL)
+const resultText = getText(result)
+setClipboard(resultText)
+output(resultText)

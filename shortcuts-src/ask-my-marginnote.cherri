@@ -1,0 +1,28 @@
+#include 'actions/web'
+#include 'actions/text'
+#include 'actions/sharing'
+
+const readSecret = prompt("请输入READ权限secret")
+const query = prompt("你想问MarginNote什么？")
+const scope = prompt("请输入搜索范围，默认notebook://", "Text", "notebook://")
+@findPayload = {}
+@findPayload = setValue(@findPayload, "pattern", query)
+@findPayload = setValue(@findPayload, "scope", scope)
+@findPayload = setValue(@findPayload, "type", "note")
+const findPayloadText = getText(@findPayload)
+const findPayloadEncoded = urlEncode(findPayloadText)
+const findURL = "marginnote4app://addon/api?requestId=req_ask_find&action=find&secret={readSecret}&payload={findPayloadEncoded}"
+const findResult = openXCallbackURL(findURL)
+const findText = getText(findResult)
+setClipboard(findText)
+alert("find结果已复制到剪贴板，请从结果中复制要展开读取的noteId。", "URL API")
+const noteId = prompt("请输入要展开读取的noteId")
+@readPayload = {}
+@readPayload = setValue(@readPayload, "path", "@id:{noteId}")
+const readPayloadText = getText(@readPayload)
+const readPayloadEncoded = urlEncode(readPayloadText)
+const readURL = "marginnote4app://addon/api?requestId=req_ask_read&action=read&secret={readSecret}&payload={readPayloadEncoded}"
+const readResult = openXCallbackURL(readURL)
+const readText = getText(readResult)
+setClipboard(readText)
+output(readText)

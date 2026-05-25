@@ -1,0 +1,19 @@
+#include 'actions/web'
+#include 'actions/text'
+#include 'actions/sharing'
+#include 'actions/documents'
+
+const readSecret = prompt("请输入READ权限secret")
+const targetPath = prompt("请输入目标路径，默认@current", "Text", "@current")
+const depth = prompt("请输入树深度，默认3", "Number", "3")
+@treePayload = {}
+@treePayload = setValue(@treePayload, "path", targetPath)
+@treePayload = setValue(@treePayload, "depth", depth)
+const treePayloadText = getText(@treePayload)
+const treePayloadEncoded = urlEncode(treePayloadText)
+const treeURL = "marginnote4app://addon/api?requestId=req_tree&action=tree&secret={readSecret}&payload={treePayloadEncoded}"
+const treeResult = openXCallbackURL(treeURL)
+const treeText = getText(treeResult)
+setClipboard(treeText)
+saveFilePrompt(treeText)
+output(treeText)
