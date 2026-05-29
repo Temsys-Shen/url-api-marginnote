@@ -36,7 +36,7 @@ marginnote4app://addon/api?requestId=...&action=...&secret=...&x-success=...&x-e
 - `x-error`：错误回调URL
 - `payload`：`urlencode(JSON.stringify(payload))`
 
-`callbackSuccess/callbackError`仍可兼容旧客户端，但推荐使用标准 `x-success/x-error`。`payload.callbacks`不再作为主协议。
+`x-success/x-error`是可选回调字段。缺少回调字段时请求仍会执行，但调用方拿不到对应成功或失败结果。`payload.callbacks`不再作为主协议。
 
 响应会追加到回调URL的 `payload`参数：
 

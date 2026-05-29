@@ -16,7 +16,6 @@ function MNURLCreateGatewayRuntime(context) {
         rawErrorCallbackUrl = MNURLResolveRawErrorCallbackUrl(rawUrl);
         request = MNURLParseGatewayRequest(rawUrl);
         callbacks = MNURLResolveGatewayCallbacks(request);
-        MNURLRequireGatewayCallbacks(callbacks);
         request = MNURLPrepareGatewayRequest(request, callbacks);
         request.contextInfo = contextInfo || {};
         request.traceId = traceId;

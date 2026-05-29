@@ -80,13 +80,13 @@
                 </tr>
                 <tr>
                     <td><code>x-success</code></td>
-                    <td>必须</td>
-                    <td>成功时的回调 URL，处理完后会跳转回此 URL 并携带结果。</td>
+                    <td>可选</td>
+                    <td>成功时的回调 URL。缺少时请求仍会执行，但不会返回成功结果。</td>
                 </tr>
                 <tr>
                     <td><code>x-error</code></td>
-                    <td>必须</td>
-                    <td>失败时的回调 URL。</td>
+                    <td>可选</td>
+                    <td>失败时的回调 URL。缺少时请求仍会执行，但失败结果只会记录日志。</td>
                 </tr>
                 <tr>
                     <td><code>payload</code></td>
@@ -103,7 +103,7 @@
         <hr>
 
         <h2>3. 回调与响应格式</h2>
-        <p>请求处理完成后，插件会通过 <code>x-success</code> 或 <code>x-error</code> 打开回调应用，并将结果转为 JSON 追加在 <code>payload</code> 参数中：</p>
+        <p>请求处理完成后，如果提供了 <code>x-success</code> 或 <code>x-error</code>，插件会打开回调应用，并将结果转为 JSON 追加在 <code>payload</code> 参数中：</p>
         <pre><code>myapp://success?payload=%7B%22code%22%3A%22OK%22...%7D</code></pre>
         
         <p>解开 URL Encode 后的响应 JSON 结构：</p>

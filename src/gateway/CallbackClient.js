@@ -1,7 +1,7 @@
 function MNURLCreateCallbackClient(logger) {
   return {
     sendSuccess: function (callbacks, response) {
-      MNURLSendGatewayCallback(
+      return MNURLSendGatewayCallbackIfAvailable(
         MNURLSelectSuccessCallbackUrl(callbacks),
         response,
         "x-success",
@@ -9,7 +9,7 @@ function MNURLCreateCallbackClient(logger) {
       );
     },
     sendError: function (callbacks, response) {
-      MNURLSendGatewayCallback(
+      return MNURLSendGatewayCallbackIfAvailable(
         MNURLSelectFailureCallbackUrl(callbacks),
         response,
         "x-error",
@@ -23,6 +23,10 @@ function MNURLCreateCallbackClient(logger) {
 }
 
 function MNURLSelectSuccessCallbackUrl(callbacks) {
+  if (!callbacks) {
+    return "";
+  }
+
   return callbacks.successUrl;
 }
 
@@ -54,4 +58,28 @@ function MNURLSendGatewayCallback(callbackUrl, response, callbackType, logger) {
     code: response.code,
     url: MNURLSummarizeUrl(finalUrl),
   });
+}
+
+function MNURLSendGatewayCallbackIfAvailable(callbackUrl, response, callbackType, logger) {
+  if (!callbackUrl) {
+    logger.info("callback.skipped", {
+      callbackType: callbackType,
+      requestId: response ? response.requestId : null,
+      code: response ? response.code : null,
+      reason: "missing_callback_url",
+    });
+    console.log(
+      "[Url Apis Gateway] callback skipped because callback URL is missing.",
+      "callbackType:",
+      callbackType,
+      "requestId:",
+      response ? response.requestId : null,
+      "code:",
+      response ? response.code : null,
+    );
+    return false;
+  }
+
+  MNURLSendGatewayCallback(callbackUrl, response, callbackType, logger);
+  return true;
 }

@@ -6,8 +6,10 @@ const files = [
   "src/gateway/GatewayProtocol.js",
   "src/gateway/GatewayErrors.js",
   "src/gateway/GatewayResponse.js",
+  "src/gateway/GatewayLogger.js",
   "src/gateway/GatewayRequestParser.js",
   "src/gateway/CallbackResolver.js",
+  "src/gateway/CallbackClient.js",
   "src/security/PermissionGroups.js",
   "src/security/SecretStore.js",
   "src/security/ReplayGuard.js",
@@ -180,7 +182,6 @@ function buildUrl(options) {
 function parseAndPrepare(rawUrl) {
   const request = context.MNURLParseGatewayRequest(rawUrl);
   const callbacks = context.MNURLResolveGatewayCallbacks(request);
-  context.MNURLRequireGatewayCallbacks(callbacks);
   return {
     request: context.MNURLPrepareGatewayRequest(request, callbacks),
     callbacks,
@@ -294,15 +295,23 @@ expectGatewayError(
   context.MNURLGatewayProtocol.ERROR_CODES.BAD_REQUEST,
 );
 
-expectGatewayError(
-  () => parseAndPrepare(buildUrl({ requestId: "missing_success", action: "ping", success: "" })),
-  context.MNURLGatewayProtocol.ERROR_CODES.BAD_REQUEST,
-);
+const missingSuccessResponse = route(buildUrl({
+  requestId: "missing_success",
+  action: "ping",
+  success: "",
+}));
+assert.strictEqual(missingSuccessResponse.code, context.MNURLGatewayProtocol.ERROR_CODES.OK);
 
-expectGatewayError(
-  () => parseAndPrepare(buildUrl({ requestId: "missing_error", action: "ping", error: "" })),
-  context.MNURLGatewayProtocol.ERROR_CODES.BAD_REQUEST,
-);
+const missingErrorResponse = route(buildUrl({
+  requestId: "missing_error",
+  action: "ping",
+  error: "",
+}));
+assert.strictEqual(missingErrorResponse.code, context.MNURLGatewayProtocol.ERROR_CODES.OK);
+
+const callbackClient = context.MNURLCreateCallbackClient(context.MNURLCreateGatewayLogger());
+assert.strictEqual(callbackClient.sendSuccess({ successUrl: "" }, missingSuccessResponse), false);
+assert.strictEqual(callbackClient.sendError({ errorUrl: "" }, missingErrorResponse), false);
 
 expectGatewayError(
   () => authenticateAndAuthorize(parseAndPrepare(buildUrl({
