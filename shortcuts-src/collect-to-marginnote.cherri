@@ -1,22 +1,41 @@
 #include 'actions/web'
 #include 'actions/text'
 #include 'actions/sharing'
+#include 'actions/calendar'
 
-const writeSecret = prompt("请输入WRITE权限secret")
-const notebookPath = prompt("请输入目标笔记本路径，例如notebook://Inbox", "Text", "notebook://")
-const incomingType = typeOf(ShortcutInput)
+@writeSecret = "请填写secret"
+@notebookPath = "notebook://收藏夹/随手收藏"
+
 const incomingText = getText(ShortcutInput)
-const title = prompt("请输入卡片标题")
-const contentPrompt = "请输入正文内容。当前输入类型: {incomingType}"
-const content = prompt(contentPrompt, "Text", incomingText)
+const now = currentDate()
+const titleText = formatTimestamp(now, "Custom", "None", "yyyy-MM-dd HH:mm:ss")
+const writeSecretText = getText(@writeSecret)
+const notebookPathText = getText(@notebookPath)
+const trimmedWriteSecret = trimWhitespace(writeSecretText)
+const trimmedNotebookPath = trimWhitespace(notebookPathText)
+const trimmedContent = trimWhitespace(incomingText)
+
+if trimmedWriteSecret == "" || trimmedWriteSecret == "请填写secret" {
+  alert("请先填写WRITE权限secret变量", "URL API")
+  stop()
+}
+if trimmedNotebookPath == "" {
+  alert("请先填写目标笔记本路径变量", "URL API")
+  stop()
+}
+if trimmedContent == "" {
+  alert("请传入快捷指令输入作为正文内容", "URL API")
+  stop()
+}
+
 @payload = {}
 @payload = setValue(@payload, "mode", "create")
-@payload = setValue(@payload, "path", notebookPath)
-@payload = setValue(@payload, "title", title)
-@payload = setValue(@payload, "content", content)
+@payload = setValue(@payload, "path", notebookPathText)
+@payload = setValue(@payload, "title", titleText)
+@payload = setValue(@payload, "content", incomingText)
 const payloadText = getText(@payload)
 const payloadEncoded = urlEncode(payloadText)
-const requestURL = "marginnote4app://addon/api?requestId=req_collect&action=write&secret={writeSecret}&payload={payloadEncoded}"
+const requestURL = "marginnote4app://addon/api?requestId=req_collect&action=write&secret={writeSecretText}&payload={payloadEncoded}"
 const result = openXCallbackURL(requestURL)
 const resultText = getText(result)
 setClipboard(resultText)
