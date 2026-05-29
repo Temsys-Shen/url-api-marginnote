@@ -44,7 +44,7 @@ marginnote4app://addon/api?requestId=...&action=...&secret=...&x-success=...&x-e
 {
   "code": "OK",
   "message": "OK",
-  "requestId": "req_001",
+  "requestId": "req_20260529163045123",
   "data": {},
   "details": null
 }

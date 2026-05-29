@@ -9,6 +9,7 @@
 const incomingText = getText(ShortcutInput)
 const now = currentDate()
 const titleText = formatTimestamp(now, "Custom", "None", "yyyy-MM-dd HH:mm:ss")
+const requestIdTimestamp = formatTimestamp(now, "Custom", "None", "yyyyMMddHHmmssSSS")
 const writeSecretText = getText(@writeSecret)
 const notebookPathText = getText(@notebookPath)
 const trimmedWriteSecret = trimWhitespace(writeSecretText)
@@ -35,7 +36,8 @@ if trimmedContent == "" {
 @payload = setValue(@payload, "content", incomingText)
 const payloadText = getText(@payload)
 const payloadEncoded = urlEncode(payloadText)
-const requestURL = "marginnote4app://addon/api?requestId=req_collect&action=write&secret={writeSecretText}&payload={payloadEncoded}"
+const requestId = "req_collect_{requestIdTimestamp}"
+const requestURL = "marginnote4app://addon/api?requestId={requestId}&action=write&secret={writeSecretText}&payload={payloadEncoded}"
 const result = openXCallbackURL(requestURL)
 const resultText = getText(result)
 setClipboard(resultText)

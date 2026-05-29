@@ -66,7 +66,7 @@
                 <tr>
                     <td><code>requestId</code></td>
                     <td>必须</td>
-                    <td>请求唯一标识符（如 UUID 或时间戳），用于防重放。</td>
+                    <td>请求唯一标识符，例如 UUID 或带毫秒的时间戳，用于防重放。</td>
                 </tr>
                 <tr>
                     <td><code>action</code></td>
@@ -98,7 +98,7 @@
 
         <h3>构建示例：</h3>
         <p>如果您想触发一次 <code>ping</code> 请求，您的 URL 将如下所示：</p>
-        <pre><code>marginnote4app://addon/api?requestId=12345&action=ping&secret=mnsec_abc&x-success=myapp://success&x-error=myapp://error</code></pre>
+        <pre><code>marginnote4app://addon/api?requestId=req_20260529163045123&action=ping&secret=mnsec_abc&x-success=myapp://success&x-error=myapp://error</code></pre>
 
         <hr>
 
@@ -110,7 +110,7 @@
         <pre><code>{
   "code": "OK",
   "message": "OK",
-  "requestId": "12345", // 与您请求时一致
+  "requestId": "req_20260529163045123", // 与您请求时一致
   "data": { ... }, // 成功时包含的返回数据
   "details": null // 错误时的详细原因
 }</code></pre>
